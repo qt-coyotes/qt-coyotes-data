@@ -1,6 +1,6 @@
-# qt coyote data
+# qt coyotes data
 
-This repository contains all of the data (images and metadata) and scripts for
+This repository contains all of the coyote data (images and metadata) and scripts for
 managing and preprocessing data for use in machine learning.
 
 ## Installation
