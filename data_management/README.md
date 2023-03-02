@@ -7,3 +7,7 @@ Using [COCO Camera Traps](https://github.com/microsoft/CameraTraps/tree/main/dat
 ### importers
 
 Code for converting metadata formats to COCO Camera Traps .json files.
+
+### verification
+
+Code for verifying data quality (no duplication)
