@@ -66,16 +66,8 @@ def main():
         width = None
         height = None
         photo_path = RAW_DATA_PATH / row["photoName"]
+        # split file io into parallelizable loop
         try:
-            # https://stackoverflow.com/questions/33548956/detect-avoid-premature-end-of-jpeg-in-cv2-python
-            with open(photo_path, "rb") as f:
-                check_chars = f.read()[-2:]
-            if check_chars != b"\xff\xd9":
-                print("weewoo")
-                print(row)
-                raise Exception(
-                    "Corrupt JPEG data: premature end of data segment"
-                )
             img = cv2.imread(str(photo_path))
             width = img.shape[1]
             height = img.shape[0]
@@ -83,6 +75,7 @@ def main():
             print(e)
             corrupt = True
         # NOTE: can only approximate sequences using frame numbers
+        # TODO: try ocr
         vid_number, frame_number = row["photoName"].split("-")
         vid_number = int(vid_number.replace("VID", ""))
         frame_number = int(frame_number.replace(".jpg", ""))
