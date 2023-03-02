@@ -168,7 +168,7 @@ def main():
             "id": str(uuid.uuid1()),
             "image_id": image["id"],
             "category_id": category_id,
-            "bbox": [0, 0, width, height],
+            "bbox": [0, 0, width, height - 198],
             "sequence_level_annotation": False,
             "city": row["City"] if not pd.isna(row["City"]) else None,
             "inspected": int(row["Inspected"])
