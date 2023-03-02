@@ -1,4 +1,7 @@
-# Mange Classifier
+# qt coyote data
+
+This repository contains all of the data (images and metadata) and scripts for
+managing and preprocessing data for use in machine learning.
 
 ## Installation
 
@@ -10,4 +13,10 @@ pip install -r requirements.txt
 
 ## DVC
 
-To pull data from `dvc`, simply use `dvc pull`.
+A DVC remote is setup with Google Drive, to pull data use `dvc pull`.
+
+## Format
+
+Will convert all metadata to
+[COCO Camera Traps](https://github.com/microsoft/CameraTraps/tree/main/data_management)
+format with additional fields.
