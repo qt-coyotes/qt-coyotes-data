@@ -31,6 +31,28 @@ confidence	High, medium, low - subjective!
 flagged for follow up	1 indicates that coyote exhibits potential signs of mange but confidence is low because of angle, photo quality, ambiguous signs, etc."""
 MAX_SEQUENCE_DELTA = timedelta(minutes=30)
 
+DUPLICATE_FILE_NAMES = set([
+    "VID3480-00002.jpg",
+    "VID3480-00012.jpg",
+    "VID3480-00020.jpg",
+    "VID3480-00031.jpg",
+    "VID3480-00038.jpg",
+    "VID3480-00040.jpg",
+    "VID3480-00041.jpg",
+    "VID3480-00042.jpg",
+    "VID3480-00043.jpg",
+    "VID3480-00044.jpg",
+    "VID3480-00045.jpg",
+    "VID3480-00046.jpg",
+    "VID3480-00047.jpg",
+    "VID3480-00052.jpg",
+    "VID3480-00034.jpg",
+    "VID3480-00036.jpg",
+    "VID3480-00037.jpg",
+    "VID3480-00048.jpg",
+    "VID5017-00099.jpg"
+])
+
 
 def get_category_id(row: pd.Series):
     commonName = (
@@ -199,6 +221,8 @@ def generate_image_sequences(df: pd.DataFrame, images: List[dict]):
 
     for _, row in tqdm(df.iterrows(), total=len(df)):
         file_name = row["photoName"]
+        if file_name in DUPLICATE_FILE_NAMES:
+            continue
         image = file_name_to_image[file_name]
         location_name = row["locationName"]
         try:
@@ -277,6 +301,9 @@ def main():
     with ProcessPoolExecutor() as executor:
         futures = []
         for _, row in df.iterrows():
+            file_name = row["photoName"]
+            if file_name in DUPLICATE_FILE_NAMES:
+                continue
             future = executor.submit(generate_image_annotation, row)
             futures.append(future)
 
@@ -287,8 +314,10 @@ def main():
 
     images = generate_image_sequences(df, images)
 
-    assert len(images) == len(df)
-    assert len(annotations) == len(df)
+    correct_len = len(df) - len(DUPLICATE_FILE_NAMES)
+
+    assert len(images) == correct_len
+    assert len(annotations) == correct_len
 
     coco = {
         "info": generate_info(COCO_PATH),
