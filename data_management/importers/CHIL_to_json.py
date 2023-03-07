@@ -221,8 +221,6 @@ def generate_image_sequences(df: pd.DataFrame, images: List[dict]):
 
     for _, row in tqdm(df.iterrows(), total=len(df)):
         file_name = row["photoName"]
-        if file_name in DUPLICATE_FILE_NAMES:
-            continue
         image = file_name_to_image[file_name]
         location_name = row["locationName"]
         try:
@@ -295,15 +293,17 @@ def generate_categories():
 def main():
     df = pd.read_excel(XLSX_PATH)
 
+    df = df.sort_values(by=["photoName", "Mange_signs_present"], ascending=[True, False])
+    df = df.drop_duplicates(subset=["photoName"])
+
+    df = df[~df["photoName"].isin(DUPLICATE_FILE_NAMES)]
+
     images = []
     annotations = []
 
     with ProcessPoolExecutor() as executor:
         futures = []
         for _, row in df.iterrows():
-            file_name = row["photoName"]
-            if file_name in DUPLICATE_FILE_NAMES:
-                continue
             future = executor.submit(generate_image_annotation, row)
             futures.append(future)
 
@@ -314,7 +314,7 @@ def main():
 
     images = generate_image_sequences(df, images)
 
-    correct_len = len(df) - len(DUPLICATE_FILE_NAMES)
+    correct_len = len(df)
 
     assert len(images) == correct_len
     assert len(annotations) == correct_len
