@@ -7,7 +7,11 @@ from tqdm import tqdm
 DUPLICATE_JSON_PATH = "data/processed/CHIL/duplicate_images.json"
 GLOB_PATTERNS = [
     "data/raw/CHIL/**/*.jpg",
-    "data/raw/CHIL_earlier/**/*.jpg"
+    "data/raw/CHIL/**/*.JPG",
+    "data/raw/CHIL_earlier/**/*.jpg",
+    "data/raw/CHIL_earlier/**/*.JPG",
+    "data/raw/mange_images/**/*.JPG",
+    "data/raw/mange_images/**/*.jpg"
 ]
 
 
